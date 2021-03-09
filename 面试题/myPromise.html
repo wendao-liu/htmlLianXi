@@ -23,7 +23,9 @@
       }
       resloveFn = (value) => {
         if (this.status !== PENDING) return;
+        console.log(1111)
         this.value = value;
+        this.status = RESLOVE
         this.resloveCallbacks.forEach((c) => {
           c(this.value)
         })
@@ -31,6 +33,7 @@
       rejectFn = (value) => {
         if (this.status !== PENDING) return;
         this.value = value;
+        this.status = REJECT
         this.rejectCallbacks.forEach((c) => {
           c(this.value)
         })
@@ -43,24 +46,37 @@
             this.rejectCallbacks.push(onRejected);
             break;
           case RESLOVE:
-            onFulfilled(this.value)
+            setTimeout(() => {
+              onFulfilled(this.value)
+            })
             break;
           case REJECT:
-            onRejected(this.value)
+            setTimeout(() => {
+              onRejected(this.value)
+            })
             break;
         }
       }
     }
 
     let promise = new myPromise((reslove, reject) => {
+      reslove(1111)
       setTimeout(() => {
         reslove(123)
+      }, 2000)
+
+      setTimeout(() => {
+        reject(123)
       }, 2000)
     })
 
     promise.then((res) => {
-      console.log(res)
+      console.log(res, 'res')
+    }, (err) => {
+      console.log(err, 'err')
     })
+
+    console.log(333)
   </script>
 </body>
 
