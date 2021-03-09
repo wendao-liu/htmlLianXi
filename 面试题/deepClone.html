@@ -24,8 +24,8 @@
       }
 
       if (typeof val === 'object') {
-        weak.set(val, JSON.parse(JSON.stringify(val)));
         let obj = {}
+        weak.set(val, obj);
         for (let key in val) {
           obj[key] = deepClone(val[key]);
         }
@@ -37,12 +37,13 @@
       a: 1,
       b: 2,
       c: {
-        d: 1
+        d: 1    // 每次地址相同
       }
     }
-    obj.c.d = obj.c
-    let obj2 = deepClone(obj)
-    // obj2.c.d.d = 666
+    obj.c.d = obj.c  // 导致 d 每次地址相同
+    let obj2 = deepClone(obj)  
+    obj2.c.d.d.d.d.d = 666   //  obj2.c.d = 666
+    obj.c.d.d.d.d.d = 666 
     console.log(obj2, 'obj2', obj); // lhy-log
   </script>
 </body>
