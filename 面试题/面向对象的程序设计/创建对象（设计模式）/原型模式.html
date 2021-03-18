@@ -63,7 +63,7 @@
     var person1 = new Person();
     person1.name = '实例属性 会 屏蔽原型属性, 现在person1 的name 取自于 实例属性'
     console.log(Person.prototype === person1.__proto__, 'person1')
-    person1.sayName(); //"Nicholas"
+    person1.sayName(); //实例属性 会 屏蔽原型属性, 现在person1 的name 取自于 实例属性
     var person2 = new Person();
     person2.sayName(); //"Nicholas"
     console.log(person1.sayName === person2.sayName); //true

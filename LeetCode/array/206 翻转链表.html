@@ -84,31 +84,27 @@
     let linkNode = new LinkNodeList()
     linkNode.append(1)
     linkNode.append(2)
-    // linkNode.append(3)
-    // linkNode.append(4)
-    // linkNode.append(5)
+    linkNode.append(3)
+    linkNode.append(4)
+    linkNode.append(5)
 
-    // 迭代
-    // var reverseList = function (head) {
-    //   let [prev, curr] = [null, head]
-    //   while (curr) {
-    //     let temp = curr.next
-    //     curr.next = prev
-    //     prev = curr
-    //     curr = temp
-    //   }
-    //   return prev;
-    // };
+    var removeElements = function (head, val) {
+      let ele = {
+        next: head
+      }
+      let cur = ele
 
-    var reverseList = function (head) {
-      if (!head || !head.next) return head;
-      let next = head.next; // next节点，反转后是最后一个节点
-      let reverseHead = reverseList(next);
-      head.next = null; // 裁减 head
-      next.next = head; // 尾接
-      return reverseHead;
+      while (cur.next) {
+        debugger
+        if (cur.next.val === val) {
+          cur.next = cur.next.next
+        } else {
+          cur = cur.next
+        }
+      }
+      return ele.next
     };
-    console.log(reverseList(linkNode.head))
+    console.log(removeElements(linkNode.head, 3))
   </script>
 </body>
 
