@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+    function deep (res) {
+      let temp = []
+      if(Array.isArray(res)) {
+        res.forEach((item) =>{
+          temp = temp.concat(...deep(item))
+        })
+      }else {
+        temp.push(res)
+      }
+      return temp
+    }
+    let res = deep(arr)
+    res =res.sort((a,b)=> (a-b))
+    console.log(res,'11111')
+
+
+    function flat(res) {
+      return [].concat(...res.map(item => (Array.isArray(item) ? flat(item) : item )))
+    }
+    console.log(flat(arr).sort((a,b)=>(a-b)),'11111')
+    
+  </script>
+</body>
+
+</html>
