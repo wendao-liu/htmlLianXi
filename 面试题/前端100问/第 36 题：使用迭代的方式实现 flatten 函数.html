@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>菜鸟教程(runoob.com)</title>
+
+</head>
+
+<body>
+
+  <h1>我的第一个 JavaScript 程序</h1>
+  <p id="demo">这是一个段落</p>
+  <div class="a"></div>
+
+  <button type="button" onclick="displayDate()">显示日期</button>
+  <script>
+    let arr = [
+      [
+        1,
+        2,
+        [
+          3,
+          [4],
+          [5]
+        ]
+      ],
+      [6,
+        [7]
+      ],
+      [8]
+    ]
+
+    function BFS(arr) {
+      let temp = []
+      while (arr.length) {
+        let s =  arr.shift();
+        if(Array.isArray(s)) {
+          arr = arr.concat(...s);
+        }else {
+          temp.push(s)
+        }
+      };
+      return temp
+    }
+    console.log(BFS(arr))
+  </script>
+</body>
+
+</html>
