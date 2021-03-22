@@ -1,0 +1,18 @@
+<script>
+  let arr = [2, 10, 3, 4, 5, 11, 10, 11, 20]
+  arr.sort((a, b) => a - b)
+  arr = [...new Set(arr)]
+  let newArr = []
+  let index = 0;
+  arr.forEach((i) => {
+    if (i >= 10) {
+      index = ~~(i / 10);
+      !newArr[index] && (newArr[index] = []);
+      newArr[index].push(i)
+    } else {
+      newArr[index] = [];
+      newArr[index].push(i)
+    }
+  })
+  console.log(newArr)
+</script>

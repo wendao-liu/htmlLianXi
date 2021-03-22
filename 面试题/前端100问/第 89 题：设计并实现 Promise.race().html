@@ -1,0 +1,12 @@
+<script>
+  // 多个Promise 只返回最先执行完的一个
+  Promise._race = promises => new Promise((reslove, reject) => {
+    promises.forEach(p => {
+      p.then(reslove, reject)
+    });
+  })
+
+  Promise._race([Promise.resolve(1), Promise.resolve(2)]).then((res) => {
+    console.log(res, 'res'); // lhy-log
+  })
+</script>

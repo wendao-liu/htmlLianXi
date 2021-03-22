@@ -1,0 +1,36 @@
+<script>
+  // 不能监听到数组的下标变化
+  let obj = {
+    name: '码不停息',
+    age: 18,
+  }
+  let arr = ['吃饭', '睡觉', '打豆豆']
+  Object.defineProperty(obj, 'love', {
+    get() {
+      // console.log(arr)
+      return arr
+    },
+    set(arrs) {
+      arr = arrs
+    }
+  })
+  obj.love = [1, 2, 3]
+  obj.love.push(99)
+  // console.log(arr)
+
+
+  let h = new Proxy([1, 2, 4], {
+    get(o, p) {
+      console.log(o, p, '----get')
+      return o[p]
+    },
+    set(o, p, v) {
+      console.log(o, p, v, '----set')
+      o[p] = v;
+      return true
+    }
+  })
+  h.pop()
+  h.pop()
+  console.log(h,'----')
+</script>

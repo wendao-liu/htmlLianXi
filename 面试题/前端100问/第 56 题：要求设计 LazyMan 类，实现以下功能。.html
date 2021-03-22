@@ -1,0 +1,48 @@
+<script>
+  class LasyClass {
+    constructor(name) {
+      console.log(`hi: ${name}`)
+      this.taskList = []
+      setTimeout(() => {
+        this.next();
+      })
+    }
+    eat(n) {
+      const fn = () => {
+        console.log(`eat:${n}`)
+        this.next();
+      }
+      this.taskList.push(fn)
+      return this;
+    }
+    sleepFirst(time) {
+      const fn = () => {
+        console.log('sleepFirst, time' + time)
+        setTimeout(() => {
+          this.next()
+        }, time)
+      }
+      this.taskList.unshift(fn)
+      return this;
+    }
+    sleep(time) {
+      const fn = () => {
+        console.log('sleep, time' + time)
+        setTimeout(() => {
+          this.next()
+        }, time)
+      }
+      this.taskList.push(fn)
+      return this;
+    }
+    next() {
+      let n = this.taskList.shift()
+      n && n();
+    }
+  }
+
+  function LazyMan(name) {
+    return new LasyClass(name)
+  }
+  LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5000).sleep(4000).eat('junk food');
+</script>

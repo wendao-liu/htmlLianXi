@@ -1,0 +1,20 @@
+<script>
+  function current(num = 0) {
+    function add(...args1) {
+      num = args1.reduce((s, c) => {
+        return s + c
+      }, num)
+      let fun = (...args2) => {
+        return add(...args2)
+      }
+      fun.toString = function () { // console.log 时会触发 toString
+        return num
+      }
+      return fun
+    }
+    return add
+  }
+
+  let add = current(0);
+  console.log(add(1, 2, 3)(1))
+</script>
