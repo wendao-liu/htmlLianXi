@@ -1,51 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
+<script type="text">
+  const weak = new WeakMap();
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-
-<body>
-  <script>
-    const weak = new WeakMap();
-    function deepClone(val) {
-      if (typeof val !== 'object') {
-        return val
-      }
-      if (Array.isArray(val)) {
-        return val.map(item => deepClone(item))
-      }
-      if (weak.has(val)) {
-        console.log(weak.get(val),'val')
-        return weak.get(val)
-      }
-
-      if (typeof val === 'object') {
-        let obj = {}
-        weak.set(val, obj);
-        for (let key in val) {
-          obj[key] = deepClone(val[key]);
-        }
-        return obj
-      }
+  function deepClone(val) {
+    if (typeof val !== 'object') {
+      return val
+    }
+    if (Array.isArray(val)) {
+      return val.map(item => deepClone(item)) // 处理数组
+    }
+    if (weak.has(val)) {
+      console.log(weak.get(val), 'val')
+      return weak.get(val)
     }
 
-    let obj = {
-      a: 1,
-      b: 2,
-      c: {
-        d: 1    // 每次地址相同
+    if (typeof val === 'object') { // 处理对象
+      let obj = {} // 处理相互引用的问题，每次都创建一个新的地址
+      weak.set(val, obj);
+      for (let key in val) {
+        obj[key] = deepClone(val[key]);
       }
+      return obj
     }
-    obj.c.d = obj.c  // 导致 d 每次地址相同
-    let obj2 = deepClone(obj)  
-    obj2.c.d.d.d.d.d = 666   //  obj2.c.d = 666
-    obj.c.d.d.d.d.d = 666 
-    console.log(obj2, 'obj2', obj); // lhy-log
-  </script>
-</body>
+  }
 
-</html>
+  let obj = {
+    a: 1,
+    f: [1, 2, 4, 5],
+    b: 2,
+    c: {
+      d: 1 // 每次地址相同
+    }
+  }
+  obj.c.d = obj.c // 导致 d 每次地址相同
+  let obj2 = deepClone(obj)
+  obj2.f.push(6)
+  obj2.c.d.d.d.d.d = 666 //  obj2.c.d = 666
+  obj.c.d.d.d.d.d = 666
+  console.log(obj2, 'obj2', obj); // lhy-log
+</script>
+
+<script>
+  const symbolName = Symbol();
+  const obj = {
+    // objNumber: new Number(1),
+    number: 1,
+    // objString: new String('ss'),
+    // string: 'stirng',
+    // objRegexp: new RegExp('\\w'),
+    // regexp: /w+/g,
+    // date: new Date(),
+    // function: function () {},
+    // array: [{
+    //   a: 1
+    // }, 2],
+    // [symbolName]: 111
+  }
+  // obj.d = obj;
+
+  const isObject = obj => obj !== null && (typeof obj === 'object' || typeof obj === 'function');
+  const isFunction = obj => typeof obj === 'function'
+
+  function deepClone(obj, hash = new WeakMap()) {
+    if (hash.get(obj)) {
+      // 环处理
+      return hash.get(obj);
+    }
+    if (!isObject(obj)) {
+      return obj;
+    }
+
+    if (isFunction(obj)) {
+      // function返回原引用
+      return obj;
+    }
+
+    let cloneObj;
+
+    debugger
+    const Constructor = obj.constructor;
+    console.log(Constructor, 'Constructor'); // lhy-log
+
+    switch (Constructor) {
+      case Boolean:
+      case Date:
+        return new Date(+obj);
+      case Number:
+      case String:
+      case RegExp:
+        return new Constructor(obj);
+      default:
+        cloneObj = new Constructor();
+        hash.set(obj, cloneObj);
+    }
+
+    [...Object.getOwnPropertyNames(obj), ...Object.getOwnPropertySymbols(obj)].forEach(k => {
+      cloneObj[k] = deepClone(obj[k], hash);
+    })
+    return cloneObj;
+  }
+  // objNumber: new Number(1),
+  // number: 1,
+  // objString: new String('ss'),
+  // string: 'stirng',
+  // objRegexp: new RegExp('\\w'),
+  // regexp: /w+/g,
+  // date: new Date(),
+  // function: function () {},
+  // array: [{
+  //   a: 1
+  // }, 2],
+  // [symbolName]: 111
+
+  const o = deepClone(obj)
+  o.objNumber = 222;
+  o[symbolName] = 222
+  console.log(o, obj)
+</script>
