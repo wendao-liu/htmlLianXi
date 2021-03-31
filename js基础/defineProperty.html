@@ -1,0 +1,17 @@
+<script>
+  let obj = {
+    a: 1
+  }
+  let value
+  Object.defineProperty(obj, 'a', {
+    enumerable: true, // 可枚举
+    writable: true, // 可重写
+    configurable: true, // 是否可删除 delete
+    get() {
+      return value;
+    }, // 获取方法
+    set(v) {
+      value = v;
+    }, // 设置方法
+  })
+</script>
