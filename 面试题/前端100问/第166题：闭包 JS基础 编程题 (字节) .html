@@ -1,0 +1,21 @@
+<script>
+  // var foo = function(...args) { // 要求实现函数体}
+  // var f1 = foo(1,2,3); f1.getValue(); // 6 输出是参数的和
+  // var f2 = foo(1)(2,3); f2.getValue(); // 6
+  // var f3 = foo(1)(2)(3)(4); f3.getValue(); // 10
+
+  Function.prototype.getValue = function () {
+    const num = this.arr.reduce((x, y) => (x + y))
+    this.arr = null
+    return num
+  }
+  var foo = function (...args) {
+    if (!Array.isArray(foo.arr)) {
+      foo.arr = []
+    }
+    foo.arr.push(...args)
+    return foo;
+  }
+  console.log(foo(1, 2, 3)(4, 5)(1)(1).getValue())
+  console.log(foo(1, 2, 3)(4, 5).getValue())
+</script>

@@ -71,7 +71,7 @@
     const baseType = ['[object String]', '[object Boolean]', '[object Number]', '[object Null]', '[object Undefined]',
       '[object Symbol]'
     ]
-    if (baseType.includes(Object.prototype.toString.call(left)) && (typeof left !== 'object' || left === null)) {
+    if (baseType.includes(Object.prototype.toString.call(left))) {
       return false
     }
     let _proto = left.__proto__
