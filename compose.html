@@ -30,7 +30,6 @@
       // return funcs.reduce((a, b) => (...args) => a(b(...args)))
       return funcs.reduce((a, b) =>{
         return  (...args) => {
-          console.log(args,'---')
           return a(b(...args))
         }
       })
