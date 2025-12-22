@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BFC 高度塌陷分析</title>
+</head>
+<style>
+  /* 
+    ============================================
+    什么是BFC (Block Formatting Context)？
+    ============================================
+    BFC是块级格式化上下文，是一个独立的渲染区域，具有以下特性：
+    1. 内部的块级元素会在垂直方向一个接一个地放置
+    2. 同一个BFC内的相邻块级元素会发生margin合并
+    3. BFC区域不会与浮动元素重叠
+    4. BFC可以包含浮动的子元素（解决高度塌陷）
+    5. BFC是一个独立的容器，内外元素互不影响
+
+    创建BFC的方法：
+    - display: inline-block / table-cell / table-caption / flex / grid
+    - overflow: hidden / auto / scroll (不为visible)
+    - position: absolute / fixed
+    - float: left / right (不为none)
+    - contain: layout / style / paint
+    */
+
+  .par {
+    border: 5px solid #fcc;
+    width: 300px;
+    /* 
+      当前状态：已经创建了BFC（通过 position: fixed）
+      但是！BFC 仍然无法解决绝对定位导致的高度塌陷！
+      */
+
+    /* 这确实创建了BFC，但对绝对定位的子元素无效 */
+
+    /* 其他创建BFC的方式 */
+    /* display: inline-block; */
+    /* overflow: hidden; */
+    /* position: absolute; */
+    /* float: left; */
+    /* display: flex; */
+    /* position: fixed; */
+  }
+
+  .child {
+    border: 5px solid #f66;
+    width: 100px;
+    height: 100px;
+    float: left;
+    /* 绝对定位，脱离文档流 */
+    /* position: absolute;  */
+  }
+
+  /* 
+    ============================================
+    为什么 par 高度塌陷了？即使创建了BFC也没用？
+    ============================================
+    
+    关键区别：
+    - BFC 可以解决【浮动元素】导致的高度塌陷 ✅
+    - BFC 无法解决【绝对定位元素】导致的高度塌陷 ❌
+    
+    原因：子元素使用了 position: absolute;
+    - 绝对定位的元素会脱离文档流
+    - 脱离文档流的元素不占据空间
+    - 父元素无法包含脱离文档流的子元素高度
+    - 因此 .par 的高度变成了 0（只有边框，没有内容高度）
+
+    为什么 BFC 对绝对定位的子元素无效？
+    - 绝对定位是相对于最近的定位父元素（position不为static）定位的
+    - 不是相对于BFC定位的
+    - 绝对定位的元素完全脱离文档流，不会参与父元素的高度计算
+    - 所以即使父元素创建了BFC，也无法包含绝对定位的子元素
+    
+    对比：
+    - 浮动元素：虽然脱离文档流，但BFC可以包含它们的高度
+    - 绝对定位：完全脱离文档流，BFC也无法包含它们的高度
+    */
+
+  /* 方式1：清除浮动（仅对浮动元素有效，对绝对定位无效） */
+  /* .par::after {
+        content: '';
+        display: block;
+        clear: both;
+    } */
+
+  /* 
+    ============================================
+    解决方案
+    ============================================
+    */
+
+  /* 解决方案1：给父元素设置 position: relative 并设置高度 */
+  /* .par {
+      position: relative;
+      height: 200px; 
+    } */
+
+  /* 解决方案2：移除子元素的绝对定位，改用其他布局方式 */
+  /* .child {
+      position: static; 
+      float: left; 
+    } */
+
+  /* 解决方案3：如果必须使用绝对定位，给父元素设置最小高度 */
+  /* .par {
+      position: relative;
+      min-height: 200px;
+    } */
+
+  /* 解决方案4：使用 flex 布局（创建BFC，但需要移除绝对定位） */
+  /* .par {
+      display: flex;
+    }
+    .child {
+      position: static;
+    } */
+</style>
+
+<body>
+  <h2>BFC 高度塌陷分析</h2>
+
+  <h3>当前情况：绝对定位导致的高度塌陷</h3>
+  <div class="par">
+    <div class="child">1</div>
+    <div class="child">2</div>
+  </div>
+  <p style="color: red; font-weight: bold;">
+    观察：即使 .par 使用了 position: fixed 创建了BFC，高度仍然塌陷！
+  </p>
+  <p>原因：BFC 只能解决浮动元素的高度塌陷，无法解决绝对定位的高度塌陷</p>
+
+  <hr style="margin: 50px 0;">
+
+  <h3>对比：如果是浮动元素，BFC 可以解决</h3>
+  <style>
+    .par-float {
+      border: 5px solid #0cc;
+      width: 300px;
+      overflow: hidden;
+      /* 创建BFC，可以包含浮动元素 */
+    }
+
+    .child-float {
+      border: 5px solid #066;
+      width: 100px;
+      height: 100px;
+      float: left;
+      /* 浮动，但BFC可以包含 */
+    }
+  </style>
+  <div class="par-float">
+    <div class="child-float">1</div>
+    <div class="child-float">2</div>
+  </div>
+  <p style="color: green; font-weight: bold;">
+    观察：使用 float 时，BFC 可以正常包含子元素，高度被撑开！
+  </p>
+
+  <hr style="margin: 50px 0;">
+
+  <h3>解决方案：针对绝对定位的高度塌陷</h3>
+  <p>必须给父元素设置明确的高度或最小高度，因为绝对定位的元素不会撑开父元素</p>
+</body>
+
+</html>

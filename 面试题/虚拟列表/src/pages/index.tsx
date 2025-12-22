@@ -11,7 +11,7 @@ const Test = () => {
   const [list] = useState(arr);
   const scrollRef = useRef(null);
   const [listImgs, setList] = useState(list.slice(0, 20));
-  const onScroll = (e) => {
+  const onScroll = (e:React.Element) => {
     let start = Math.floor(e.target.scrollTop / 20);
 
       if( scrollRef && scrollRef.current) {

@@ -1,24 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script>
+    // let obj = {
+    //   a: 1,
+    //   b: 2,
+    //   *[Symbol.iterator]() {
+    //     // yield * Object.values(this)
+    //     // yield Object.values(this);
+    //     yield* Object.entries(this)
+    //   },
+    // };
+    // console.log(...obj);
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<script>
-  let obj = {
-    a: 1,
-    b: 2,
-    *[Symbol.iterator]() {
-      yield * Object.values(this)
+    let range = {
+      from: 1,
+      to: 5,
+
+      [Symbol.iterator]() {
+        this.current = this.from;
+        console.log(1111);
+        return this;
+      },
+
+      next() {
+        if (this.current <= this.to) {
+          return { done: false, value: this.current++ };
+        } else {
+          return { done: true };
+        }
+      },
+    };
+    for (let num of range) {
+      console.log(num); // 1, 然后是 2, 3, 4, 5
     }
-  }
-  console.log(...obj)
-</script>
-<body>
-
-</body>
-
+  </script>
+  <body></body>
 </html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    img {
+        display: block;
+        width: 100px;
+        height: 100px;
+        background: red;
+        overflow: hidden;
+    }
+</style>
+
+<body>
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b443ac90165.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b4430138464.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b441f616f18.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b443ac90165.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b4430138464.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b441f616f18.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b443ac90165.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b4430138464.jpg">
+    <img src="./loading.gif" class="lazy"
+        data-src="https://img.dpm.org.cn/Uploads/Picture/2021/05/31/s60b441f616f18.jpg">
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var lazyloadImages;
+        if ("IntersectionObserver" in window) {
+            lazyloadImages = document.querySelectorAll(".lazy");
+            var imageObserver = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        var image = entry.target;
+                        image.src = image.dataset.src;
+                        image.classList.remove("lazy");
+                        imageObserver.unobserve(image);
+                    }
+                });
+            });
+
+            lazyloadImages.forEach(function (image) {
+                imageObserver.observe(image);
+            });
+        }
+    })
+</script>
+
+</html>

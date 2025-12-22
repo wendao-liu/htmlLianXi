@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script type="text">
+    function* generator() {
+        const c = yield* [1, new Promise((reslove) => {
+            setTimeout(() => {
+                reslove(1)
+            }, 1000);
+        }), 3];
+        console.log(c);
+    }
+    const it = generator();
+    const it1 = it.next();
+    console.log(it1.value);
+    const it2 = it.next();
+    it2.value.then((value) => {
+        console.log(value)
+    })
+
+</script>
+<script type="text">
+    // 自执行函数
+    function getFoo() {
+        return new Promise(function (resolve, reject) {
+            resolve('foo');
+        });
+    }
+    const g = function* () {
+        try {
+            const foo = yield getFoo();
+            console.log(foo);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    function run(generator) {
+        const it = generator();
+        function go(result) {
+            if (result.done) return result.value;
+            return result.value.then(function (value) {
+                return go(it.next(value));
+            }, function (error) {
+                return go(it.throw(error));
+            });
+        }
+        go(it.next());
+    }
+    run(g);
+</script>
+
+
+
+<body>
+    <button class="generator">+</button>
+</body>
+
+<script>
+    let x = 100
+    function* helloWorldGenerator() {
+        yield x + 10;
+        yield 'world';
+        return 'ending';
+    }
+    var hw = helloWorldGenerator();
+
+    x = 200
+    let iter = document.getElementsByClassName('generator')[0];
+    iter.addEventListener('click', () => {
+        console.log(hw.next()); // 200
+        console.log(hw.next()); // world
+        console.log(hw.next()); // ending
+    })
+</script>
+
+</html>

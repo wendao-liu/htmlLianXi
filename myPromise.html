@@ -11,7 +11,7 @@
     const PENDING = 'PENDING'
     const FULFILLED = 'FULFILLED'
     const REJECTED = 'REJECTED'
- 
+
     class MyPromise {
       constructor(handle) {
         if (!isFunction(handle)) {
@@ -95,7 +95,6 @@
         } = this
         // 返回一个新的Promise对象
         return new MyPromise((onFulfilledNext, onRejectedNext) => {
-          debugger
           // 封装一个成功时执行的函数
           let fulfilled = value => {
             try {
@@ -142,7 +141,7 @@
               this._fulfilledQueues.push(fulfilled)
               this._rejectedQueues.push(rejected)
               break
-              // 当状态已经改变时，立即执行对应的回调函数
+            // 当状态已经改变时，立即执行对应的回调函数
             case FULFILLED:
               fulfilled(_value)
               break
@@ -153,7 +152,7 @@
         })
       }
       // 添加catch方法
-      catch (onRejected) {
+      catch(onRejected) {
         return this.then(undefined, onRejected)
       }
       // 添加静态resolve方法
@@ -211,16 +210,33 @@
       }
     }
 
+    // let d = new MyPromise((reslove, reject) => {
+    //   reslove({ a: 11 })
+    // }).then((v) => {
+    //   return v
+    // }).then((v) => {
+    //   return MyPromise.reject(111)
+    // }).then((v) => {
+    //   console.log('1111');
+    //   return v
+    // }).catch(() => {
+    //   console.log('catch');
+    // })
+
     let d = new MyPromise((reslove, reject) => {
-      setTimeout(() => {
-        reslove(21312)
-      }, 2000)
+      reslove({ a: 11 })
+    }).then((v) => {
+      return v
+    }).finally((v) => {
+      console.log('11');
+      return v
+    }).then((v) => {
+      console.log('22');
+      return MyPromise.reject(111)
+    }).catch(() => {
+      console.log('catch');
     })
 
-    d.then((res) => {
-      console.log(res)
-      return 6
-    })
   </script>
 </head>
 

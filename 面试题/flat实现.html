@@ -10,10 +10,24 @@
 
 <body>
   <script>
+    // 方式1
     function flat(res) {
-      return [].concat(...res.map(item => (Array.isArray(item) ? flat(item) : item )))
+      return [].concat(...res.map(item => (Array.isArray(item) ? flat(item) : item)))
     }
-    console.log(flat(arr).sort((a,b)=>(a-b)),'11111')
+    console.log(flat(arr).sort((a, b) => (a - b)), '11111')
+
+    // 方式2
+    function* flat2(tree) {
+      if (Array.isArray(tree)) {
+        for (let i = 0; i < tree.length; i++) {
+          yield* flat2(tree[i])
+        }
+      } else {
+        yield tree
+      }
+    }
+    const tree = ['a', ['b', 'c'], ['d', 'e', [1, 2, 3, [4, 5, 6]]]];
+    console.log([...flat2(tree)])
   </script>
 </body>
 

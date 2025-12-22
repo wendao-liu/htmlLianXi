@@ -22,6 +22,7 @@
         fn(this.resloveFn, this.rejectFn)
       }
       resloveFn = (value) => {
+        debugger
         if (this.status !== PENDING) return;
         console.log(1111)
         this.value = value;
@@ -31,6 +32,8 @@
         })
       }
       rejectFn = (value) => {
+        debugger
+
         if (this.status !== PENDING) return;
         this.value = value;
         this.status = REJECT
@@ -40,6 +43,7 @@
       }
 
       then(onFulfilled, onRejected) {
+        debugger
         switch (this.status) {
           case PENDING:
             this.resloveCallbacks.push(onFulfilled);
@@ -60,14 +64,14 @@
     }
 
     let promise = new myPromise((reslove, reject) => {
-      reslove(1111)
+      // reslove(1111)
       setTimeout(() => {
         reslove(123)
       }, 2000)
 
-      setTimeout(() => {
-        reject(123)
-      }, 2000)
+      // setTimeout(() => {
+      //   reject(123)
+      // }, 2000)
     })
 
     promise.then((res) => {

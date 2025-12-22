@@ -16,11 +16,12 @@
       let bound = function (...args2) {
         // 在new的时候为 27行 Fn.prototype 那就是 context.fn.prototype 原型那就是 test 函数 === context.fn test函数 ，所以绑定的this是函数test
         // 在直接bind时候， this === window ，直接使用，this.constructor => widow下的constructor  !== context.fn test函数 所以绑定this是 context 
-        context.fn.apply(this.constructor === context.fn ? this : context, [...args1, ...args2])
+        // context.fn.apply(this.constructor === context.fn ? this : context, [...args1, ...args2])
+        context.fn([...args1, ...args2])
       }
 
       // 这一步骤很重要，bound的原型就指向了 context.fn.prototype -> test函数
-      bound.prototype =  context.fn.prototype
+      // bound.prototype =  context.fn.prototype
       return bound
     }
 

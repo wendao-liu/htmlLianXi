@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    html,
+    body {
+        margin: 0;
+        height: 100%;
+    }
+
+    .contain {
+        box-sizing: border-box;
+        display: grid;
+        width: 500px;
+        height: 500px;
+        background: red;
+
+        /* 九格布局 */
+        /* grid-template-columns: repeat(3, 33.33%); */
+        /* grid-template-rows: repeat(3, 33.33%); */
+
+        /* 两栏布局 */
+        /* grid-template-columns: 100px 1fr; */
+        /* grid-template-rows: 100%;  */
+
+        /* 间隙 */
+        /* grid-gap: 10px; */
+        /* row-gap: 10px; */
+        /* row-gap column-gap */
+        /* gap: 10px 10px; */
+
+
+        /* 1.区域划分 */
+        /* grid-template-areas:
+            "head head"
+            "nav  main"
+            "nav  foot"; */
+        /* 2.区域划分 当前为 三行 两列 */
+        /* grid-template-rows: 50px 1fr 30px; */
+        /* 3.各区域 宽高设置 */
+        /* grid-template-columns: 150px 1fr; */
+
+    }
+
+    /* .head {
+        grid-area: head;
+    }
+
+    .nav {
+        grid-area: nav;
+    }
+
+    .main {
+        grid-area: main;
+    }
+
+    .foot {
+        grid-area: foot;
+    } */
+</style>
+
+<body>
+
+    <div class="contain">
+        <div class="item head">123</div>
+        <div class="item nav">2</div>
+        <div class="item main">3</div>
+        <div class="item foot">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+        <div class="item">7</div>
+        <div class="item">8</div>
+        <div class="item">9</div>
+    </div>
+</body>
+
+</html>
